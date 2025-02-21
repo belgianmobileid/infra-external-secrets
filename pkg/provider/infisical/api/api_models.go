@@ -52,6 +52,7 @@ type GetSecretByKeyV3Response struct {
 type GetSecretsV3Request struct {
 	EnvironmentSlug string `json:"environment"`
 	ProjectSlug     string `json:"workspaceSlug"`
+	Recursive       bool   `json:"recursive"`
 	SecretPath      string `json:"secretPath"`
 }
 
@@ -83,5 +84,7 @@ type ImportedSecretV3 struct {
 type InfisicalAPIErrorResponse struct {
 	StatusCode int    `json:"statusCode"`
 	Message    string `json:"message"`
-	Error      any    `json:"error"`
+	Error      string `json:"error"`
+	// According to Infisical's API docs, `details` are only returned for 403 errors.
+	Details any `json:"details,omitempty"`
 }

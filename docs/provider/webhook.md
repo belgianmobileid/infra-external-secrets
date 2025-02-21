@@ -4,7 +4,7 @@ External Secrets Operator can integrate with simple web apis by specifying the e
 
 ### Example
 
-First, create a SecretStore with a webhook backend.  We'll use a static user/password `root`:
+First, create a SecretStore with a webhook backend.  We'll use a static user/password `test`:
 
 ```yaml
 {% raw %}
@@ -67,6 +67,53 @@ data:
   foobar: c2VjcmV0
 ```
 
+To push a secret, create the following store:
+
+```yaml
+{% raw %}
+apiVersion: external-secrets.io/v1beta1
+kind: SecretStore
+metadata:
+  name: webhook-backend
+spec:
+  provider:
+    webhook:
+      url: "http://httpbin.org/push?id={{ .remoteRef.remoteKey }}&secret={{ .remoteRef.secretKey }}"
+      headers:
+        Content-Type: application/json
+        Authorization: Basic {{ print .auth.username ":" .auth.password | b64enc }}
+      secrets:
+      - name: auth
+        secretRef:
+          name: webhook-credentials
+{%- endraw %}
+```
+
+Then create a push secret:
+
+```yaml
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: pushsecret-example # Customisable
+spec:
+  refreshInterval: 1h # Refresh interval for which push secret will reconcile
+  secretStoreRefs: # A list of secret stores to push secrets to
+    - name: webhook-backend
+      kind: SecretStore
+  selector:
+    secret:
+      name: test-secret
+  data:
+    - conversionStrategy: 
+      match:
+        secretKey: testsecret
+        remoteRef:
+          remoteKey: remotekey
+```
+
+If `secretKey` is not provided, the whole secret is pushed JSON encoded.
+
 #### Limitations
 
 Webhook does not support authorization, other than what can be sent by generating http headers
@@ -124,4 +171,4 @@ spec:
 ```
 
 ### Webhook as generators
-You can also leverage webhooks as generators, following the same syntax. The only difference is that the webhook generator needs its source secrets to be labeled, as opposed to webhook secretstores. Please see the [generator-webhook](../api/generator/webhook.md) documentation for more information. 
+You can also leverage webhooks as generators, following the same syntax. The only difference is that the webhook generator needs its source secrets to be labeled, as opposed to webhook secretstores. Please see the [generator-webhook](../api/generator/webhook.md) documentation for more information.

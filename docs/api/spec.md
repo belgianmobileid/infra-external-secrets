@@ -1076,6 +1076,19 @@ External Secrets meta/v1.SecretKeySelector
 <tbody>
 <tr>
 <td>
+<code>apiKey</code></br>
+<em>
+<a href="#external-secrets.io/v1beta1.BeyondTrustProviderSecretRef">
+BeyondTrustProviderSecretRef
+</a>
+</em>
+</td>
+<td>
+<p>APIKey If not provided then ClientID/ClientSecret become required.</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>clientId</code></br>
 <em>
 <a href="#external-secrets.io/v1beta1.BeyondTrustProviderSecretRef">
@@ -1084,6 +1097,7 @@ BeyondTrustProviderSecretRef
 </em>
 </td>
 <td>
+<p>ClientID is the API OAuth Client ID.</p>
 </td>
 </tr>
 <tr>
@@ -1096,6 +1110,7 @@ BeyondTrustProviderSecretRef
 </em>
 </td>
 <td>
+<p>ClientSecret is the API OAuth Client Secret.</p>
 </td>
 </tr>
 <tr>
@@ -1108,7 +1123,7 @@ BeyondTrustProviderSecretRef
 </em>
 </td>
 <td>
-<p>Content of the certificate (cert.pem) for use when authenticating with an OAuth client Id using a Client Certificate.</p>
+<p>Certificate (cert.pem) for use when authenticating with an OAuth client Id using a Client Certificate.</p>
 </td>
 </tr>
 <tr>
@@ -1190,6 +1205,16 @@ BeyondtrustServer
 <tr>
 <td>
 <code>apiUrl</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+<code>apiVersion</code></br>
 <em>
 string
 </em>
@@ -1732,7 +1757,8 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The name of the external secrets to be created defaults to the name of the ClusterExternalSecret</p>
+<p>The name of the external secrets to be created.
+Defaults to the name of the ClusterExternalSecret</p>
 </td>
 </tr>
 <tr>
@@ -1920,7 +1946,8 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>The name of the external secrets to be created defaults to the name of the ClusterExternalSecret</p>
+<p>The name of the external secrets to be created.
+Defaults to the name of the ClusterExternalSecret</p>
 </td>
 </tr>
 <tr>
@@ -2989,8 +3016,10 @@ Kubernetes meta/v1.Duration
 </em>
 </td>
 <td>
-<p>RefreshInterval is the amount of time before the values are read again from the SecretStore provider
+<p>RefreshInterval is the amount of time before the values are read again from the SecretStore provider,
+specified as Golang Duration strings.
 Valid time units are &ldquo;ns&rdquo;, &ldquo;us&rdquo; (or &ldquo;µs&rdquo;), &ldquo;ms&rdquo;, &ldquo;s&rdquo;, &ldquo;m&rdquo;, &ldquo;h&rdquo;
+Example values: &ldquo;1h&rdquo;, &ldquo;2h30m&rdquo;, &ldquo;5d&rdquo;, &ldquo;10s&rdquo;
 May be set to zero to fetch and create it once. Defaults to 1h.</p>
 </td>
 </tr>
@@ -3139,8 +3168,7 @@ string
 </em>
 </td>
 <td>
-<p>SecretKey defines the key in which the controller stores
-the value. This is the key in the Kind=Secret</p>
+<p>The key in the Kubernetes Secret to store the value.</p>
 </td>
 </tr>
 <tr>
@@ -3168,7 +3196,7 @@ StoreSourceRef
 </td>
 <td>
 <p>SourceRef allows you to override the source
-from which the value will pulled from.</p>
+from which the value will be pulled.</p>
 </td>
 </tr>
 </tbody>
@@ -3730,8 +3758,10 @@ Kubernetes meta/v1.Duration
 </em>
 </td>
 <td>
-<p>RefreshInterval is the amount of time before the values are read again from the SecretStore provider
+<p>RefreshInterval is the amount of time before the values are read again from the SecretStore provider,
+specified as Golang Duration strings.
 Valid time units are &ldquo;ns&rdquo;, &ldquo;us&rdquo; (or &ldquo;µs&rdquo;), &ldquo;ms&rdquo;, &ldquo;s&rdquo;, &ldquo;m&rdquo;, &ldquo;h&rdquo;
+Example values: &ldquo;1h&rdquo;, &ldquo;2h30m&rdquo;, &ldquo;5d&rdquo;, &ldquo;10s&rdquo;
 May be set to zero to fetch and create it once. Defaults to 1h.</p>
 </td>
 </tr>
@@ -3939,8 +3969,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Name defines the name of the Secret resource to be managed
-This field is immutable
+<p>The name of the Secret resource to be managed.
 Defaults to the .metadata.name of the ExternalSecret resource</p>
 </td>
 </tr>
@@ -3955,8 +3984,8 @@ ExternalSecretCreationPolicy
 </td>
 <td>
 <em>(Optional)</em>
-<p>CreationPolicy defines rules on how to create the resulting Secret
-Defaults to &lsquo;Owner&rsquo;</p>
+<p>CreationPolicy defines rules on how to create the resulting Secret.
+Defaults to &ldquo;Owner&rdquo;</p>
 </td>
 </tr>
 <tr>
@@ -3970,8 +3999,8 @@ ExternalSecretDeletionPolicy
 </td>
 <td>
 <em>(Optional)</em>
-<p>DeletionPolicy defines rules on how to delete the resulting Secret
-Defaults to &lsquo;Retain&rsquo;</p>
+<p>DeletionPolicy defines rules on how to delete the resulting Secret.
+Defaults to &ldquo;Retain&rdquo;</p>
 </td>
 </tr>
 <tr>
@@ -4565,7 +4594,7 @@ string
 </em>
 </td>
 <td>
-<p>Specify the Kind of the resource, e.g. Password, ACRAccessToken etc.</p>
+<p>Specify the Kind of the generator resource</p>
 </td>
 </tr>
 <tr>
@@ -5244,6 +5273,17 @@ CAProvider
 <code>secretsPath</code></br>
 <em>
 string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+</td>
+</tr>
+<tr>
+<td>
+<code>recursive</code></br>
+<em>
+bool
 </em>
 </td>
 <td>
@@ -7797,6 +7837,7 @@ string
 </em>
 </td>
 <td>
+<p>The name of the ConfigMap/Secret resource</p>
 </td>
 </tr>
 <tr>
@@ -7809,6 +7850,7 @@ string
 </em>
 </td>
 <td>
+<p>A list of keys in the ConfigMap/Secret to use as templates for Secret data</p>
 </td>
 </tr>
 </tbody>
@@ -7837,6 +7879,7 @@ string
 </em>
 </td>
 <td>
+<p>A key in the ConfigMap/Secret</p>
 </td>
 </tr>
 <tr>
@@ -9157,7 +9200,7 @@ string
 </em>
 </td>
 <td>
-<p>The key the value inside of the provider type to use, only used with &ldquo;Secret&rdquo; type</p>
+<p>The key where the CA certificate can be found in the Secret or ConfigMap.</p>
 </td>
 </tr>
 <tr>
